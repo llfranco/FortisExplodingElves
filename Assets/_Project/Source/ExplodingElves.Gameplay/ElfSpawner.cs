@@ -17,10 +17,13 @@ namespace ExplodingElves.Gameplay
         [SerializeField]
         private MeshRenderer _renderer;
 
-        public void SpawnElf(Vector3 position, TeamDefinition team)
+        [SerializeField]
+        private Transform[] _spawnPoints;
+
+        public void SpawnElf(Vector3 position)
         {
             Elf elf = Instantiate(_settings.Prefab, position, Quaternion.identity);
-            elf.Setup(team);
+            elf.Setup(_owningTeam);
         }
 
         private void OnValidate()
@@ -33,6 +36,7 @@ namespace ExplodingElves.Gameplay
             Debug.AssertFormat(_settings != null, "{0} is null", nameof(_settings));
             Debug.AssertFormat(_owningTeam != null, "{0} is null", nameof(_owningTeam));
             Debug.AssertFormat(_renderer != null, "{0} is null", nameof(_renderer));
+            Debug.AssertFormat(_spawnPoints.Length > 0, "{0} is empty", nameof(_spawnPoints));
 
             MaterialPropertyBlock propertyBlock = new();
             Color color = new(_owningTeam.AccentColor.r, _owningTeam.AccentColor.g, _owningTeam.AccentColor.b, ColorAlpha);
@@ -48,7 +52,7 @@ namespace ExplodingElves.Gameplay
 
         private void RandomlySpawnElf()
         {
-            SpawnElf(transform.position, _owningTeam);
+            SpawnElf(_spawnPoints[Random.Range(0, _spawnPoints.Length)].position);
         }
     }
 }

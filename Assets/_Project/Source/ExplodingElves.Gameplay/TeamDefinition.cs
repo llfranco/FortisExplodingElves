@@ -2,7 +2,7 @@
 
 namespace ExplodingElves.Gameplay
 {
-    [CreateAssetMenu(menuName = "Exploding Elves/Create TeamDefinition", fileName = "TeamDefinition")]
+    [CreateAssetMenu(menuName = "Exploding Elves/Create " + nameof(TeamDefinition), fileName = nameof(TeamDefinition))]
     public class TeamDefinition : ScriptableObject
     {
         [SerializeField]
