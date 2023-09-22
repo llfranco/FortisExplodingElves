@@ -1,0 +1,16 @@
+{
+    "name": "ExplodingElves.Gameplay",
+    "rootNamespace": "ExplodingElves.Gameplay",
+    "references": [
+        "GUID:eca3f5f48a14edc40994ab3a1dd89609"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

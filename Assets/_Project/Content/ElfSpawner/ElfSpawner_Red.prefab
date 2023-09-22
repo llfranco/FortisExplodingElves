@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5537919142724103219
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3348408661847362251, guid: 2b45af629a61d8d4683810785309d3a7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3348408661847362251, guid: 2b45af629a61d8d4683810785309d3a7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3348408661847362251, guid: 2b45af629a61d8d4683810785309d3a7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4300954296702767082, guid: 2b45af629a61d8d4683810785309d3a7, type: 3}
+      propertyPath: _owningTeam
+      value: 
+      objectReference: {fileID: 11400000, guid: 99c09a549dcbbf64293e1589ab1da9db, type: 2}
+    - target: {fileID: 8752642779039868270, guid: 2b45af629a61d8d4683810785309d3a7, type: 3}
+      propertyPath: m_Name
+      value: ElfSpawner_Red
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2b45af629a61d8d4683810785309d3a7, type: 3}
