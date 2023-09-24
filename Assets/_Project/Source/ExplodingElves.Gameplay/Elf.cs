@@ -35,6 +35,11 @@ namespace ExplodingElves.Gameplay
             _navMeshAgent = GetComponent<NavMeshAgent>();
         }
 
+        private void OnCollisionEnter(Collision other)
+        {
+            Debug.Log($"{gameObject.name} has collided with {other.gameObject.name}", gameObject);
+        }
+
         private void Awake()
         {
             Debug.AssertFormat(_renderer != null, "{0} is null", nameof(_renderer));

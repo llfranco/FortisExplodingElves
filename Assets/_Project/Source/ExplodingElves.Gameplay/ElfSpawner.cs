@@ -1,12 +1,18 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ExplodingElves.Gameplay
 {
     public sealed class ElfSpawner : MonoBehaviour, IElfSpawner
     {
+        public event IElfSpawner.ElfSpawnSignature OnElfSpawned;
+
         private const float ColorAlpha = 0.6f;
 
         private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
+
+        private readonly List<Elf> _activeElves = new();
+        private readonly List<Elf> _cachedElves = new();
 
         [SerializeField]
         private ElfSpawnerSettings _settings;
@@ -20,10 +26,20 @@ namespace ExplodingElves.Gameplay
         [SerializeField]
         private Transform[] _spawnPoints;
 
+        public TeamDefinition OwningTeam => _owningTeam;
+
+        public int ActiveElvesCount => _activeElves.Count;
+
+        public float SpawnRate { get; set; }
+
         public void SpawnElf(Vector3 position)
         {
             Elf elf = Instantiate(_settings.Prefab, position, Quaternion.identity);
             elf.Setup(_owningTeam);
+
+            _activeElves.Add(elf);
+
+            OnElfSpawned?.Invoke();;
         }
 
         private void OnValidate()
@@ -38,6 +54,8 @@ namespace ExplodingElves.Gameplay
             Debug.AssertFormat(_renderer != null, "{0} is null", nameof(_renderer));
             Debug.AssertFormat(_spawnPoints.Length > 0, "{0} is empty", nameof(_spawnPoints));
 
+            SpawnRate = _settings.DefaultSpawnRate;
+
             MaterialPropertyBlock propertyBlock = new();
             Color color = new(_owningTeam.AccentColor.r, _owningTeam.AccentColor.g, _owningTeam.AccentColor.b, ColorAlpha);
             propertyBlock.SetColor(ColorPropertyId, color);
@@ -47,7 +65,7 @@ namespace ExplodingElves.Gameplay
 
         private void Start()
         {
-            InvokeRepeating(nameof(RandomlySpawnElf), _settings.DefaultSpawnRate, _settings.DefaultSpawnRate);
+            InvokeRepeating(nameof(RandomlySpawnElf), SpawnRate, _settings.DefaultSpawnRate);
         }
 
         private void RandomlySpawnElf()

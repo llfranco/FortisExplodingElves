@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: TeamDefinition_Red
   m_EditorClassIdentifier: 
   _id: 1
+  _displayName: Red Team
   _accentColor: {r: 1, g: 0, b: 0, a: 1}

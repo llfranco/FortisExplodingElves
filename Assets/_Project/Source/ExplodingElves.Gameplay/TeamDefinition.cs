@@ -9,7 +9,12 @@ namespace ExplodingElves.Gameplay
         private int _id;
 
         [SerializeField]
+        private string _displayName;
+
+        [SerializeField]
         private Color _accentColor;
+
+        public string DisplayName => _displayName;
 
         public Color AccentColor => _accentColor;
 
