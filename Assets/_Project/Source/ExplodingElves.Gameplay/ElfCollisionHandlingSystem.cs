@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ExplodingElves.Gameplay
 {
     public sealed class ElfCollisionHandlingSystem : MonoBehaviour
     {
+        private IElfSpawnerService _spawnerService;
+
         private void Start()
         {
-            IReadOnlyList<IElfSpawner> spawners = ServiceLocator.GetService<IElfSpawnerService>().GetSpawners();
+            _spawnerService = ServiceLocator.GetService<IElfSpawnerService>();
 
-            foreach (IElfSpawner spawner in spawners)
+            foreach (IElfSpawner spawner in _spawnerService.GetSpawners())
             {
                 spawner.OnElfSpawned += HandleElfSpawned;
             }

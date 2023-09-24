@@ -14,7 +14,7 @@ namespace ExplodingElves.Gameplay
 
         public IReadOnlyList<IElfSpawner> GetSpawners()
         {
-            List<IElfSpawner> spawners = new List<IElfSpawner>(_spawners.Count);
+            List<IElfSpawner> spawners = new(_spawners.Count);
 
             foreach (KeyValuePair<TeamDefinition, ElfSpawner> pair in _spawners)
             {

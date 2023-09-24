@@ -31,6 +31,12 @@ namespace ExplodingElves.Gameplay
 
         public float SpawnRate { get; set; }
 
+        public void RandomlySpawnElf()
+        {
+            SpawnElf(_spawnPoints[Random.Range(0, _spawnPoints.Length)].position);
+            Invoke(nameof(RandomlySpawnElf), SpawnRate);
+        }
+
         public void SpawnElf(Vector3 position)
         {
             Elf elf = Instantiate(_settings.Prefab, position, Quaternion.identity);
@@ -64,12 +70,6 @@ namespace ExplodingElves.Gameplay
 
         private void Start()
         {
-            Invoke(nameof(RandomlySpawnElf), SpawnRate);
-        }
-
-        private void RandomlySpawnElf()
-        {
-            SpawnElf(_spawnPoints[Random.Range(0, _spawnPoints.Length)].position);
             Invoke(nameof(RandomlySpawnElf), SpawnRate);
         }
     }
