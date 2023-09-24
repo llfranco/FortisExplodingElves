@@ -12,6 +12,18 @@ namespace ExplodingElves.Gameplay
             return _spawners[team];
         }
 
+        public IReadOnlyList<IElfSpawner> GetSpawners()
+        {
+            List<IElfSpawner> spawners = new List<IElfSpawner>(_spawners.Count);
+
+            foreach (KeyValuePair<TeamDefinition, ElfSpawner> pair in _spawners)
+            {
+                spawners.Add(pair.Value);
+            }
+
+            return spawners;
+        }
+
         private void Awake()
         {
             ElfSpawner[] spawners = FindObjectsOfType<ElfSpawner>(true);

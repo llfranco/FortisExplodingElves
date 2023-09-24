@@ -4,7 +4,7 @@ namespace ExplodingElves.Gameplay
 {
     public interface IElfSpawner
     {
-        public delegate void ElfSpawnSignature();
+        public delegate void ElfSpawnSignature(IElf elf);
 
         public event ElfSpawnSignature OnElfSpawned;
 

@@ -3,8 +3,10 @@ using UnityEngine.AI;
 
 namespace ExplodingElves.Gameplay
 {
-    public sealed class Elf : MonoBehaviour
+    public sealed class Elf : MonoBehaviour, IElf
     {
+        public event IElf.ElfCollisionSignature OnElfCollisionEntered;
+
         private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
 
         [SerializeField]
@@ -17,11 +19,12 @@ namespace ExplodingElves.Gameplay
         private NavMeshAgent _navMeshAgent;
 
         private Transform _transform;
-        private TeamDefinition _team;
+
+        public TeamDefinition Team { get; private set; }
 
         public void Setup(TeamDefinition team)
         {
-            _team = team;
+            Team = team;
 
             MaterialPropertyBlock propertyBlock = new();
             propertyBlock.SetColor(ColorPropertyId, team.AccentColor);
@@ -38,6 +41,11 @@ namespace ExplodingElves.Gameplay
         private void OnCollisionEnter(Collision other)
         {
             Debug.Log($"{gameObject.name} has collided with {other.gameObject.name}", gameObject);
+
+            if (other.gameObject.TryGetComponent(out Elf otherElf))
+            {
+                OnElfCollisionEntered?.Invoke(this, otherElf);
+            }
         }
 
         private void Awake()

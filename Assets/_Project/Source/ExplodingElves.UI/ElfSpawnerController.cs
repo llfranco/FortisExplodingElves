@@ -39,7 +39,7 @@ namespace ExplodingElves.UI
             _spawnRateSlider.onValueChanged.AddListener(HandleSpawnRateSliderValueChanged);
         }
 
-        private void HandleElfSpawned()
+        private void HandleElfSpawned(IElf elf)
         {
             _activeElvesText.SetText(string.Format(ActiveElvesTextFormat, _targetElfSpawner.ActiveElvesCount));
         }

@@ -12,7 +12,6 @@ namespace ExplodingElves.Gameplay
         private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
 
         private readonly List<Elf> _activeElves = new();
-        private readonly List<Elf> _cachedElves = new();
 
         [SerializeField]
         private ElfSpawnerSettings _settings;
@@ -39,7 +38,7 @@ namespace ExplodingElves.Gameplay
 
             _activeElves.Add(elf);
 
-            OnElfSpawned?.Invoke();;
+            OnElfSpawned?.Invoke(elf);;
         }
 
         private void OnValidate()
@@ -65,7 +64,7 @@ namespace ExplodingElves.Gameplay
 
         private void Start()
         {
-            RandomlySpawnElf();
+            Invoke(nameof(RandomlySpawnElf), SpawnRate);
         }
 
         private void RandomlySpawnElf()
