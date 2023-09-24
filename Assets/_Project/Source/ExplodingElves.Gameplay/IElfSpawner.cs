@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace ExplodingElves.Gameplay
+﻿namespace ExplodingElves.Gameplay
 {
     public interface IElfSpawner
     {
@@ -12,8 +10,6 @@ namespace ExplodingElves.Gameplay
 
         float SpawnRate { get; set; }
 
-        void RandomlySpawnElf();
-
-        void SpawnElf(Vector3 position);
+        void QueueSpawn();
     }
 }
