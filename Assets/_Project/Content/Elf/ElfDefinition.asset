@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2cdde8026d94989a03bf8095cffaa4d, type: 3}
   m_Name: ElfDefinition
   m_EditorClassIdentifier: 
-  _destinationSearchingRadius: 100
+  _destinationSearchingRadius: 10

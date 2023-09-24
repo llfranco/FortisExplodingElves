@@ -7,6 +7,8 @@ namespace ExplodingElves.Gameplay
     {
         public event IElf.ElfCollisionSignature OnElfCollisionEntered;
 
+        private const float DistanceThreshold = 0.1f;
+
         private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
 
         [SerializeField]
@@ -38,10 +40,13 @@ namespace ExplodingElves.Gameplay
             _navMeshAgent = GetComponent<NavMeshAgent>();
         }
 
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawSphere(_navMeshAgent.destination, 0.5f);
+        }
+
         private void OnCollisionEnter(Collision other)
         {
-            Debug.Log($"{gameObject.name} has collided with {other.gameObject.name}", gameObject);
-
             if (other.gameObject.TryGetComponent(out Elf otherElf))
             {
                 OnElfCollisionEntered?.Invoke(this, otherElf);
@@ -58,11 +63,10 @@ namespace ExplodingElves.Gameplay
 
         private void Update()
         {
-            if (_navMeshAgent.pathStatus != NavMeshPathStatus.PathComplete)
+            if (_navMeshAgent.remainingDistance > DistanceThreshold)
             {
                 return;
             }
-
             Vector3 nextDestination = NavMeshStatics.RandomNavMeshPositionWithinRadius(_transform.position, _definition.DestinationSearchingRadius);
 
             _navMeshAgent.SetDestination(nextDestination);

@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f76cb0b6da1e4f7e906cea28f7d6f028, type: 3}
   m_Name: ElfSpawnerSettings
   m_EditorClassIdentifier: 
-  _defaultSpawnRate: 5
+  _defaultSpawnRate: 1
+  _collisionDetectionExtents: {x: 2, y: 4, z: 2}
+  _collisionDetectionMask:
+    serializedVersion: 2
+    m_Bits: 128
   _prefab: {fileID: 7356373123668958048, guid: 2a39c87a2c0cd594fb02c9bbe7060171, type: 3}

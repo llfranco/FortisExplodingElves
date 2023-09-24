@@ -11,6 +11,7 @@ namespace ExplodingElves.Gameplay
 
         private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
 
+        private readonly Collider[] _collisionDetectionBuffer = new Collider[1];
         private readonly List<Elf> _activeElves = new();
 
         [SerializeField]
@@ -25,6 +26,8 @@ namespace ExplodingElves.Gameplay
         [SerializeField]
         private Transform[] _spawnPoints;
 
+        private uint _queuedSpawnsCount;
+
         public TeamDefinition OwningTeam => _owningTeam;
 
         public int ActiveElvesCount => _activeElves.Count;
@@ -33,7 +36,7 @@ namespace ExplodingElves.Gameplay
 
         public void RandomlySpawnElf()
         {
-            SpawnElf(_spawnPoints[Random.Range(0, _spawnPoints.Length)].position);
+            _queuedSpawnsCount++;
             Invoke(nameof(RandomlySpawnElf), SpawnRate);
         }
 
@@ -71,6 +74,36 @@ namespace ExplodingElves.Gameplay
         private void Start()
         {
             Invoke(nameof(RandomlySpawnElf), SpawnRate);
+        }
+
+        private void Update()
+        {
+            if (_queuedSpawnsCount == 0 || !TryFindSpawnPoint(out Transform spawnPoint))
+            {
+                return;
+            }
+
+            SpawnElf(spawnPoint.position);
+            _queuedSpawnsCount--;
+        }
+
+        private bool TryFindSpawnPoint(out Transform foundSpawnPoint)
+        {
+            foreach (Transform spawnPoint in _spawnPoints)
+            {
+                if (Physics.OverlapBoxNonAlloc(spawnPoint.position, _settings.CollisionDetectionExtents, _collisionDetectionBuffer, Quaternion.identity, _settings.CollisionDetectionMask) > 0)
+                {
+                    continue;
+                }
+
+                foundSpawnPoint = spawnPoint;
+
+                return true;
+            }
+
+            foundSpawnPoint = default;
+
+            return false;
         }
     }
 }
