@@ -65,12 +65,13 @@ namespace ExplodingElves.Gameplay
 
         private void Start()
         {
-            InvokeRepeating(nameof(RandomlySpawnElf), SpawnRate, _settings.DefaultSpawnRate);
+            RandomlySpawnElf();
         }
 
         private void RandomlySpawnElf()
         {
             SpawnElf(_spawnPoints[Random.Range(0, _spawnPoints.Length)].position);
+            Invoke(nameof(RandomlySpawnElf), SpawnRate);
         }
     }
 }

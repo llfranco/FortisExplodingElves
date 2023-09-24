@@ -10,7 +10,7 @@ namespace ExplodingElves
             public object SecurityKey;
         }
 
-        private static readonly Dictionary<int, ServiceEntry> Services;
+        private static readonly Dictionary<int, ServiceEntry> Services = new();
 
         public static void SetService<T>(T provider, object securityKey = default) where T : class
         {

@@ -5,7 +5,7 @@ namespace ExplodingElves.Gameplay
 {
     public sealed class ElfSpawnerSystem : MonoBehaviour, IElfSpawnerService
     {
-        private Dictionary<TeamDefinition, ElfSpawner> _spawners;
+        private Dictionary<TeamDefinition, ElfSpawner> _spawners = new();
 
         public IElfSpawner GetTeamSpawner(TeamDefinition team)
         {

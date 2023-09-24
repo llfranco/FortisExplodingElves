@@ -9,6 +9,7 @@ namespace ExplodingElves.UI
     {
         private const string TargetTeamTextFormat = "TargetTeam: {0}";
         private const string ActiveElvesTextFormat = "Active Elves: {0}";
+        private const string SpawnRateTextFormat = "Spawn Rate: {0:#.##}";
 
         [SerializeField]
         private TeamDefinition _targetTeam;
@@ -18,6 +19,9 @@ namespace ExplodingElves.UI
 
         [SerializeField]
         private TMP_Text _activeElvesText;
+
+        [SerializeField]
+        private TMP_Text _spawnRateText;
 
         [SerializeField]
         private Slider _spawnRateSlider;
@@ -30,6 +34,7 @@ namespace ExplodingElves.UI
             _targetElfSpawner.OnElfSpawned += HandleElfSpawned;
             _targetTeamText.SetText(string.Format(TargetTeamTextFormat, _targetTeam.DisplayName));
             _activeElvesText.SetText(string.Format(ActiveElvesTextFormat, _targetElfSpawner.ActiveElvesCount));
+            _spawnRateText.SetText(string.Format(SpawnRateTextFormat, _targetElfSpawner.SpawnRate));
             _spawnRateSlider.SetValueWithoutNotify(_targetElfSpawner.SpawnRate);
             _spawnRateSlider.onValueChanged.AddListener(HandleSpawnRateSliderValueChanged);
         }
@@ -42,6 +47,7 @@ namespace ExplodingElves.UI
         private void HandleSpawnRateSliderValueChanged(float value)
         {
             _targetElfSpawner.SpawnRate = value;
+            _spawnRateText.SetText(string.Format(SpawnRateTextFormat, value));
         }
     }
 }
