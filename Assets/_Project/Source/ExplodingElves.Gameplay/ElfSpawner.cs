@@ -12,6 +12,7 @@ namespace ExplodingElves.Gameplay
         private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
 
         private readonly Collider[] _collisionDetectionBuffer = new Collider[1];
+        private readonly Stack<Elf> _pooledElves = new();
         private readonly List<Elf> _activeElves = new();
 
         [SerializeField]
@@ -37,6 +38,15 @@ namespace ExplodingElves.Gameplay
         public void QueueSpawn()
         {
             _queuedSpawnsCount++;
+        }
+
+        public void QueueDeSpawn(IElf elf)
+        {
+            Elf typedElf = (Elf)elf;
+            typedElf.Dispose();
+
+            _activeElves.Remove(typedElf);
+            _pooledElves.Push(typedElf);
         }
 
         private void OnValidate()
@@ -84,9 +94,8 @@ namespace ExplodingElves.Gameplay
 
         public void SpawnElf(Vector3 position)
         {
-            Elf elf = Instantiate(_settings.Prefab, position, Quaternion.identity);
-            elf.Setup(_owningTeam);
-
+            Elf elf = _pooledElves.Count > 0 ? _pooledElves.Pop() : Instantiate(_settings.Prefab);
+            elf.Setup(position, Quaternion.identity, _owningTeam);
             _activeElves.Add(elf);
 
             OnElfSpawned?.Invoke(elf);;

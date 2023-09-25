@@ -20,18 +20,37 @@ namespace ExplodingElves.Gameplay
         [SerializeField]
         private NavMeshAgent _navMeshAgent;
 
+        private bool _hasAwakened;
+        private GameObject _gameObject;
         private Transform _transform;
+
+        public bool IsActive { get; private set; }
 
         public TeamDefinition Team { get; private set; }
 
-        public void Setup(TeamDefinition team)
+        public void Setup(Vector3 position, Quaternion rotation, TeamDefinition team)
         {
+            if (!_hasAwakened)
+            {
+                Awake();
+            }
+
+            _transform.position = position;
+            _transform.rotation = rotation;
+
+            IsActive = true;
             Team = team;
 
             MaterialPropertyBlock propertyBlock = new();
             propertyBlock.SetColor(ColorPropertyId, team.AccentColor);
 
             _renderer.SetPropertyBlock(propertyBlock);
+        }
+
+        public void Dispose()
+        {
+            IsActive = false;
+            Team = default;
         }
 
         private void OnValidate()
@@ -55,18 +74,26 @@ namespace ExplodingElves.Gameplay
 
         private void Awake()
         {
+            if (_hasAwakened)
+            {
+                return;
+            }
+
             Debug.AssertFormat(_renderer != null, "{0} is null", nameof(_renderer));
             Debug.AssertFormat(_navMeshAgent != null, "{0} is null", nameof(_navMeshAgent));
 
+            _gameObject = gameObject;
             _transform = transform;
+            _hasAwakened = true;
         }
 
         private void Update()
         {
-            if (_navMeshAgent.remainingDistance > DistanceThreshold)
+            if (!IsActive || _navMeshAgent.remainingDistance > DistanceThreshold)
             {
                 return;
             }
+
             Vector3 nextDestination = NavMeshStatics.RandomNavMeshPositionWithinRadius(_transform.position, _definition.DestinationSearchingRadius);
 
             _navMeshAgent.SetDestination(nextDestination);

@@ -11,5 +11,7 @@
         float SpawnRate { get; set; }
 
         void QueueSpawn();
+
+        void QueueDeSpawn(IElf elf);
     }
 }
