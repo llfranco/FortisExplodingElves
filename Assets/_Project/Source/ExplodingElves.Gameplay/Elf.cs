@@ -94,7 +94,7 @@ namespace ExplodingElves.Gameplay
                 return;
             }
 
-            Vector3 nextDestination = NavMeshStatics.RandomNavMeshPositionWithinRadius(_transform.position, _definition.DestinationSearchingRadius);
+            Vector3 nextDestination = NavMeshStatics.RandomNavMeshPositionWithinRadius(_transform.position, _navMeshAgent, _definition.DestinationSearchingRadius);
 
             _navMeshAgent.SetDestination(nextDestination);
         }

@@ -5,11 +5,11 @@ namespace ExplodingElves.Gameplay
 {
     public static class NavMeshStatics
     {
-        public static Vector3 RandomNavMeshPositionWithinRadius(Vector3 sourcePosition, float radius)
+        public static Vector3 RandomNavMeshPositionWithinRadius(Vector3 sourcePosition, NavMeshAgent agent, float maxRadius)
         {
-            Vector3 randomNearbyPosition = sourcePosition + Random.insideUnitSphere * radius;
+            Vector3 randomNearbyPosition = sourcePosition + Random.insideUnitSphere * maxRadius;
 
-            return NavMesh.SamplePosition(randomNearbyPosition, out NavMeshHit hit, radius, 1) ? hit.position : sourcePosition;
+            return NavMesh.SamplePosition(randomNearbyPosition, out NavMeshHit hit, agent.radius * 4f, 1) ? hit.position : sourcePosition;
         }
     }
 }
