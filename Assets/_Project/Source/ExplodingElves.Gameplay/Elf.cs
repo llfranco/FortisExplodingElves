@@ -45,12 +45,15 @@ namespace ExplodingElves.Gameplay
             propertyBlock.SetColor(ColorPropertyId, team.AccentColor);
 
             _renderer.SetPropertyBlock(propertyBlock);
+            _gameObject.SetActive(true);
         }
 
         public void Dispose()
         {
             IsActive = false;
             Team = default;
+
+            _gameObject.SetActive(false);
         }
 
         private void OnValidate()

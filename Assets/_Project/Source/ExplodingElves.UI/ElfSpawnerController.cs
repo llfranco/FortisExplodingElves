@@ -31,7 +31,8 @@ namespace ExplodingElves.UI
         private void Start()
         {
             _targetElfSpawner = ServiceLocator.GetService<IElfSpawnerService>().GetTeamSpawner(_targetTeam);
-            _targetElfSpawner.OnElfSpawned += HandleElfSpawned;
+            _targetElfSpawner.OnElfSpawned += HandleElfSpawnedOrDeSpawned;
+            _targetElfSpawner.OnElfDeSpawned += HandleElfSpawnedOrDeSpawned;
             _targetTeamText.SetText(string.Format(TargetTeamTextFormat, _targetTeam.DisplayName));
             _activeElvesText.SetText(string.Format(ActiveElvesTextFormat, _targetElfSpawner.ActiveElvesCount));
             _spawnRateText.SetText(string.Format(SpawnRateTextFormat, _targetElfSpawner.SpawnRate));
@@ -39,7 +40,7 @@ namespace ExplodingElves.UI
             _spawnRateSlider.onValueChanged.AddListener(HandleSpawnRateSliderValueChanged);
         }
 
-        private void HandleElfSpawned(IElf elf)
+        private void HandleElfSpawnedOrDeSpawned(IElf elf)
         {
             _activeElvesText.SetText(string.Format(ActiveElvesTextFormat, _targetElfSpawner.ActiveElvesCount));
         }

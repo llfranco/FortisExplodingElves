@@ -37,7 +37,7 @@ namespace ExplodingElves.Gameplay
             if (!self.Team.MatchesTeam(other.Team))
             {
                 self.OnElfCollisionEntered -= HandleElfCollisionEntered;
-                Destroy(((Elf)self).gameObject);
+                _spawnerService.GetTeamSpawner(self.Team).QueueDeSpawn(self);
 
                 return;
             }

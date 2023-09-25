@@ -7,6 +7,8 @@ namespace ExplodingElves.Gameplay
     {
         public event IElfSpawner.ElfSpawnSignature OnElfSpawned;
 
+        public event IElfSpawner.ElfSpawnSignature OnElfDeSpawned;
+
         private const float ColorAlpha = 0.6f;
 
         private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
@@ -14,6 +16,7 @@ namespace ExplodingElves.Gameplay
         private readonly Collider[] _collisionDetectionBuffer = new Collider[1];
         private readonly Stack<Elf> _pooledElves = new();
         private readonly List<Elf> _activeElves = new();
+        private readonly List<Elf> _queuedDeSpawns = new();
 
         [SerializeField]
         private ElfSpawnerSettings _settings;
@@ -42,11 +45,7 @@ namespace ExplodingElves.Gameplay
 
         public void QueueDeSpawn(IElf elf)
         {
-            Elf typedElf = (Elf)elf;
-            typedElf.Dispose();
-
-            _activeElves.Remove(typedElf);
-            _pooledElves.Push(typedElf);
+            _queuedDeSpawns.Add((Elf)elf);
         }
 
         private void OnValidate()
@@ -77,28 +76,48 @@ namespace ExplodingElves.Gameplay
 
         private void Update()
         {
+            ClearDeSpawnQueue();
+            ClearSpawnQueue();
+        }
+
+        private void ClearDeSpawnQueue()
+        {
+            if (_queuedDeSpawns.Count == 0)
+            {
+                return;
+            }
+
+            foreach (Elf elf in _queuedDeSpawns)
+            {
+                elf.Dispose();
+
+                _activeElves.Remove(elf);
+                _pooledElves.Push(elf);
+
+                OnElfDeSpawned?.Invoke(elf);
+            }
+        }
+
+        private void ClearSpawnQueue()
+        {
             if (_queuedSpawnsCount == 0 || !TryFindSpawnPoint(out Transform spawnPoint))
             {
                 return;
             }
 
-            SpawnElf(spawnPoint.position);
+            Elf elf = _pooledElves.Count > 0 ? _pooledElves.Pop() : Instantiate(_settings.Prefab);
+            elf.Setup(spawnPoint.position, Quaternion.identity, _owningTeam);
+
             _queuedSpawnsCount--;
+            _activeElves.Add(elf);
+
+            OnElfSpawned?.Invoke(elf);;
         }
 
         private void InvokeQueueSpawn()
         {
             QueueSpawn();
             Invoke(nameof(InvokeQueueSpawn), SpawnRate);
-        }
-
-        public void SpawnElf(Vector3 position)
-        {
-            Elf elf = _pooledElves.Count > 0 ? _pooledElves.Pop() : Instantiate(_settings.Prefab);
-            elf.Setup(position, Quaternion.identity, _owningTeam);
-            _activeElves.Add(elf);
-
-            OnElfSpawned?.Invoke(elf);;
         }
 
         private bool TryFindSpawnPoint(out Transform foundSpawnPoint)

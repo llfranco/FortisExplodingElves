@@ -6,6 +6,8 @@
 
         public event ElfSpawnSignature OnElfSpawned;
 
+        public event ElfSpawnSignature OnElfDeSpawned;
+
         int ActiveElvesCount { get; }
 
         float SpawnRate { get; set; }
