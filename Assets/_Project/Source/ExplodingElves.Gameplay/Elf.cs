@@ -7,7 +7,7 @@ namespace ExplodingElves.Gameplay
     {
         public event IElf.ElfCollisionSignature OnElfCollisionEntered;
 
-        private const float DistanceThreshold = 0.1f;
+        private const float DistanceThreshold = 0.25f;
 
         private static readonly int ColorPropertyId = Shader.PropertyToID("_Color");
 

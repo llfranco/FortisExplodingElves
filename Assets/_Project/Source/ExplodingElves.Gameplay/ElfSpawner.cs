@@ -40,6 +40,13 @@ namespace ExplodingElves.Gameplay
 
         public void QueueSpawn()
         {
+            if (TryFindSpawnPoint(out Transform spawnPoint))
+            {
+                SpawnElf(spawnPoint.position);
+
+                return;
+            }
+
             _queuedSpawnsCount++;
         }
 
@@ -100,24 +107,39 @@ namespace ExplodingElves.Gameplay
 
         private void ClearSpawnQueue()
         {
-            if (_queuedSpawnsCount == 0 || !TryFindSpawnPoint(out Transform spawnPoint))
+            if (_queuedSpawnsCount == 0)
             {
                 return;
             }
 
-            Elf elf = _pooledElves.Count > 0 ? _pooledElves.Pop() : Instantiate(_settings.Prefab);
-            elf.Setup(spawnPoint.position, Quaternion.identity, _owningTeam);
+            uint iterations = _queuedSpawnsCount;
 
-            _queuedSpawnsCount--;
-            _activeElves.Add(elf);
+            for (int i = 0; i < iterations; i++)
+            {
+                if (!TryFindSpawnPoint(out Transform spawnPoint))
+                {
+                    return;
+                }
 
-            OnElfSpawned?.Invoke(elf);;
+                SpawnElf(spawnPoint.position);
+                _queuedSpawnsCount--;
+            }
         }
 
         private void InvokeQueueSpawn()
         {
             QueueSpawn();
             Invoke(nameof(InvokeQueueSpawn), SpawnRate);
+        }
+
+        private void SpawnElf(Vector3 position)
+        {
+            Elf elf = _pooledElves.Count > 0 ? _pooledElves.Pop() : Instantiate(_settings.Prefab);
+            elf.Setup(position, Quaternion.identity, _owningTeam);
+
+            _activeElves.Add(elf);
+
+            OnElfSpawned?.Invoke(elf);;
         }
 
         private bool TryFindSpawnPoint(out Transform foundSpawnPoint)
